@@ -1,7 +1,9 @@
 package com.robsan.rest.resource;
- 
+
 import com.robsan.types.RestResponse;
 import com.wordnik.swagger.annotations.*;
+import org.apache.log4j.Logger;
+
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -10,14 +12,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import java.util.ArrayList;
 import java.util.List;
+
 
 @Path("/v1/users")
 @Api(value = "/v1/user", description = "Get user info")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class mathmasterService {
+public class MathmasterService {
+
+	final static Logger logger = Logger.getLogger(MathmasterService.class);
 
 	private static final String ERROR_CODE_GET = "ERROR_CODE_GET";
 	private static final String ERROR_CODE_POST= "ERROR_CODE_GET";
@@ -38,7 +41,7 @@ public class mathmasterService {
 
 		String output = "Jersey say wites  : " + userid;
 
-
+		logger.debug("foobar.. GET..");
 		//return errorHandler(Response.Status.BAD_REQUEST, ERROR_CODE_GET, msg);
 		return successHandler(1);
 

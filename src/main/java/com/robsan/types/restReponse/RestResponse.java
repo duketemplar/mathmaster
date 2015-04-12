@@ -1,4 +1,4 @@
-package com.robsan.types;
+package com.robsan.types.restReponse;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -26,7 +26,7 @@ public class RestResponse {
 
     @XmlElement
     @JsonProperty
-    private String errorCode;
+    private RestResponseCode errorCode;
 
     @XmlElement
     @JsonProperty
@@ -37,7 +37,7 @@ public class RestResponse {
         // Empty constructor
     }
 
-    public RestResponse(Integer sid, String errorCode) {
+    public RestResponse(Integer sid, RestResponseCode errorCode) {
         this.sid = sid;
         this.errorCode = errorCode;
     }
@@ -54,11 +54,11 @@ public class RestResponse {
         this.sid = sid;
     }
 
-    public String getErrorCode() {
+    public RestResponseCode getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(String errorCode) {
+    public void setErrorCode(RestResponseCode errorCode) {
         this.errorCode = errorCode;
     }
 

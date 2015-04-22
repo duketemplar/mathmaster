@@ -44,27 +44,31 @@ public class MathmasterInitializer implements WebApplicationInitializer {
         // Glue 'root'[WebApplicationContext] to the lifecycle of ServletContext
         servletContext.addListener(new ContextLoaderListener(context));
 
-        // Register and map the jersey servlet.
+/*
+
+        FilterRegistration.Dynamic swaggerFilterRegistration = servletContext
+                .addFilter("swagger-ui-filter", new StaticContentFilter());
+        swaggerFilterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/swagger-ui*/
+/*");
+
+        logger.debug("Filter swagger: "+ swaggerFilterRegistration.getServletNameMappings());
+*/
+
+
+        // Register and map the jersey servlet to conteXt.
         ServletRegistration.Dynamic servletRegistration = servletContext
                 .addServlet("service-math-servlet", new ServletContainer(new ServiceMathmasterResource()));
         servletRegistration.setLoadOnStartup(1);
         servletRegistration.addMapping(MAPPING_URL);
 
 
-
-        FilterRegistration.Dynamic swaggerFilterRegistration = servletContext
-                .addFilter("swagger-ui-filter", new StaticContentFilter());
-        swaggerFilterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/swagger-ui/*");
-
-
-    }
+ }
 
 
     // Jersey resource initializer
     public static class ServiceMathmasterResource extends ResourceConfig {
         public ServiceMathmasterResource() {
 
-            //this.packages(true, CONFIG_LOCATION, "com.wordnik.swagger.jersey.listing");
             this.packages(true, CONFIG_LOCATION, "com.wordnik.swagger.jaxrs.listing");
             this.register(JacksonJaxbJsonProvider.class);
 

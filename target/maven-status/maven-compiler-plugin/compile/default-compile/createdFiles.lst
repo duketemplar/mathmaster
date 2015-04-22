@@ -1,8 +1,0 @@
-com/robsan/config/StaticContentFilter.class
-com/robsan/config/MathmasterConfig.class
-com/robsan/types/RestResponse.class
-com/robsan/rest/resource/HelloExample.class
-com/robsan/config/MathmasterInitializer$ServiceMathmasterResource.class
-com/robsan/config/MathmasterInitializer.class
-com/robsan/rest/resource/MathmasterService.class
-com/robsan/rest/resource/MathmasterService$1.class

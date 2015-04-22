@@ -1,5 +1,6 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:context="http://www.springframework.org/schema/context"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
 
@@ -19,7 +20,7 @@
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping-->
 
-    <!--servlet>
+    <servlet>
         <servlet-name>Jersey2Config</servlet-name>
         <servlet-class>com.wordnik.swagger.jersey.config.JerseyJaxrsConfig</servlet-class>
         <init-param>
@@ -31,17 +32,7 @@
             <param-value>http://localhost:8080/service-mathmaster/rest</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
-    </servlet-->
-
-
-
-
-
-
-
-
-
-
-
+    </servlet>
 
 </web-app>
+

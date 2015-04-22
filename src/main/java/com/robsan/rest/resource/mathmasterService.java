@@ -1,15 +1,17 @@
 package com.robsan.rest.resource;
 
-import com.robsan.types.RestResponse;
+import com.robsan.dao.UserDao;
+
+import com.robsan.types.restReponse.RestResponseCode;
+import com.robsan.types.User;
+import com.robsan.types.restReponse.RestResponseHandler;
 import com.wordnik.swagger.annotations.*;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.*;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -22,15 +24,46 @@ public class MathmasterService {
 
 	final static Logger logger = Logger.getLogger(MathmasterService.class);
 
-	private static final String ERROR_CODE_GET = "ERROR_CODE_GET";
-	private static final String ERROR_CODE_POST= "ERROR_CODE_GET";
-
 	private static final String PARAM_USER_ID = "userid";
+	private static final String PARAM_USER= "user";
+	private static final String URL_ADD_USER= "/addUser";
+
+	private static final String ERROR_CODE_GET_USER = "FAILED_GET_USER";
+	private static final String ERROR_CODE_ADD_USER = "FAILED_ADD_USER";
+
+	@Autowired
+	UserDao userDao;
+
+
+	@POST
+	@Path(URL_ADD_USER)
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@ApiOperation(value = "Add user", notes = "Post req user",
+			response = Integer.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Successful update"),
+			@ApiResponse(code = 404, message = "Not modified")
+	})
+	public Response addUser(
+			@ApiParam(value = PARAM_USER, required = true)
+			User user) {
+
+		logger.debug("Add user: "+ userDao.toString());
+		Integer sid = userDao.addUser(user);
+		if(sid == 0){
+			logger.debug("Failed adding user with cstno: "+user.getCstno());
+			return RestResponseHandler.errorHandler(Response.Status.BAD_REQUEST,
+					RestResponseCode.ERROR_CODE_POST, ERROR_CODE_ADD_USER);
+		}
+
+		return RestResponseHandler.successHandlerSid(sid);
+	}
 
 	@GET
 	@Path("/{"+PARAM_USER_ID+"}")
 	@ApiOperation(value = "Get user info based on sid.", notes = "GET it",
-			response = Integer.class)
+			response = User.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successful update"),
 			@ApiResponse(code = 404, message = "Not modified")
@@ -39,34 +72,58 @@ public class MathmasterService {
 			@ApiParam(value = PARAM_USER_ID, required = true)
 			@PathParam(PARAM_USER_ID) Integer userid) {
 
-		String output = "Jersey say wites  : " + userid;
 
-		logger.debug("foobar.. GET..");
-		//return errorHandler(Response.Status.BAD_REQUEST, ERROR_CODE_GET, msg);
-		return successHandler(1);
+		logger.debug("GET user: "+userid);
+		List<User> users = userDao.getUser(userid);
+		if(users == null){
+			logger.debug("GET failed getting user on sid : "+userid);
+			return RestResponseHandler.errorHandler(Response.Status.BAD_REQUEST,
+					RestResponseCode.ERROR_CODE_GET, ERROR_CODE_GET_USER);
 
- 
+		}
+
+		logger.debug("GET user result: "+users.toString());
+		return RestResponseHandler.successHandlerUser(users);
 	}
 
 
 
+	/*@POST
+	@Path("/{"+PARAM_USER+"}")
+	@ApiOperation(value = "Add user.", notes = "Post req it",
+			response = Integer.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Successful Post"),
+			@ApiResponse(code = 404, message = "Not modified")
+	})
+	public Response addUser(
+			@ApiParam(value = PARAM_USER, required = true)
+			@PathParam(PARAM_USER) User user) {
 
-	private Response errorHandler(Response.Status status, String code, String text){
-		RestResponse response = new RestResponse();
-		response.setErrorCode(code);
-		response.setErrorText(text);
-		return Response.status(status).entity(response).build();
-	}
 
-	private Response successHandler(Integer sid){
-		RestResponse response = new RestResponse();
-		response.setSid(sid);
-		return Response.ok(response).build();
-	}
+			//logger.debug("Add user: "+ userDao.toString());
+			//Integer sid = userDao.addUser(user);
 
-	private Response successHandler(List<RestResponse> result){
-		return Response.ok(new GenericEntity<List<RestResponse>>(result) {
-		}).build();
-	}
+		return RestResponseHandler.errorHandler(Response.Status.BAD_REQUEST,
+				RestResponseCode.ERROR_CODE_GET, ERROR_CODE_GET_USER);
+
+
+			if(sid == null){
+				logger.debug("GET failed getting user on sid : "+user.toString());
+				return RestResponseHandler.errorHandler(Response.Status.BAD_REQUEST,
+					RestResponseCode.ERROR_CODE_GET, ERROR_CODE_GET_USER);
+
+			}
+
+
+			//logger.debug("User added: "+sid);
+			//return RestResponseHandler.successHandlerSid(1);
+
+
+	}*/
+
+
+
+
  
 }

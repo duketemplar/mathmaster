@@ -33,13 +33,13 @@ public class RestResponse {
     private String errorText;
 
 
-    public RestResponse() {
-        // Empty constructor
+    public RestResponse(Integer sid) {
+        this.sid = sid;
     }
 
-    public RestResponse(Integer sid, RestResponseCode errorCode) {
-        this.sid = sid;
+    public RestResponse(RestResponseCode errorCode, String errorText) {
         this.errorCode = errorCode;
+        this.errorText = errorText;
     }
 
     public static long getSerialVersionUID() {
